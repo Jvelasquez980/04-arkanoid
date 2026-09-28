@@ -34,6 +34,18 @@ const LEVELS = [
   ] },
 ];
 
+// Sonidos (fuera de game: no se resetean)
+const SOUNDS = {
+  bounce: new Audio('assets/sounds/ball-bounce.mp3'),
+  break: new Audio('assets/sounds/break-sound.mp3'),
+};
+let muted = false;
+
+function playSound(name) {
+  if (muted) return;
+  SOUNDS[name].cloneNode().play().catch(() => {});
+}
+
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
@@ -151,13 +163,16 @@ function stepBall(dt) {
   if (ball.x < 0) {
     ball.x = 0;
     ball.vx = Math.abs(ball.vx);
+    playSound('bounce');
   } else if (ball.x + ball.w > W) {
     ball.x = W - ball.w;
     ball.vx = -Math.abs(ball.vx);
+    playSound('bounce');
   }
   if (ball.y < 0) {
     ball.y = 0;
     ball.vy = Math.abs(ball.vy);
+    playSound('bounce');
   }
 
   const { paddle } = game;
@@ -168,6 +183,7 @@ function stepBall(dt) {
   ) {
     ball.y = paddle.y - ball.h;
     ball.vy = -Math.abs(ball.vy);
+    playSound('bounce');
   }
 
   collideBlocks();
@@ -224,6 +240,7 @@ function collideBlocks() {
     b.alive = false;
     game.explosions.push({ x: b.x, y: b.y, w: b.w, h: b.h, color: b.color, elapsed: 0 });
     game.score += POINTS_PER_BLOCK;
+    playSound('break');
     break;   // un bloque por frame
   }
 }
