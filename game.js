@@ -91,6 +91,31 @@ function updateBall(dt) {
     ball.y = 0;
     ball.vy = Math.abs(ball.vy);
   }
+
+  const { paddle } = game;
+  if (
+    ball.vy > 0 &&
+    ball.x + ball.w > paddle.x && ball.x < paddle.x + paddle.w &&
+    ball.y + ball.h > paddle.y && ball.y < paddle.y + paddle.h
+  ) {
+    ball.y = paddle.y - ball.h;
+    ball.vy = -Math.abs(ball.vy);
+  }
+
+  if (ball.y > H) loseLife();
+}
+
+function loseLife() {
+  const { ball } = game;
+  game.lives--;
+  ball.vx = 0;
+  ball.vy = 0;
+  if (game.lives <= 0) {
+    game.state = 'lost';
+  } else {
+    game.state = 'ready';
+    stickBallToPaddle();
+  }
 }
 
 function update(dt) {
