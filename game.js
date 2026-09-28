@@ -24,7 +24,47 @@ function stickBallToPaddle() {
   ball.y = paddle.y - ball.h;
 }
 
+const keys = { left: false, right: false };
+let lastInput = 'mouse';   // 'mouse' | 'keyboard'; gana el último usado
+
+function clampPaddle() {
+  const { paddle } = game;
+  paddle.x = Math.max(0, Math.min(W - paddle.w, paddle.x));
+}
+
+function keyToDir(code) {
+  if (code === 'ArrowLeft' || code === 'KeyA') return 'left';
+  if (code === 'ArrowRight' || code === 'KeyD') return 'right';
+  return null;
+}
+
+window.addEventListener('keydown', (e) => {
+  const dir = keyToDir(e.code);
+  if (!dir) return;
+  e.preventDefault();
+  keys[dir] = true;
+  lastInput = 'keyboard';
+});
+
+window.addEventListener('keyup', (e) => {
+  const dir = keyToDir(e.code);
+  if (dir) keys[dir] = false;
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (W / rect.width);
+  game.paddle.x = mx - game.paddle.w / 2;
+  clampPaddle();
+  lastInput = 'mouse';
+});
+
 function update(dt) {
+  if (lastInput === 'keyboard') {
+    const dir = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+    game.paddle.x += dir * PADDLE_SPEED * dt;
+    clampPaddle();
+  }
   if (game.state === 'ready') stickBallToPaddle();
 }
 
