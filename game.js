@@ -3,15 +3,43 @@ const BALL_SPEED = 300;      // px/s, constante
 const PADDLE_SPEED = 500;    // px/s, teclado
 const POINTS_PER_BLOCK = 10;
 const INITIAL_LIVES = 3;
-const ROW_COLORS = ['red', 'yellow', 'cyan', 'green', 'magenta', 'hotpink'];
+const BLOCK_CHARS = { R: 'red', Y: 'yellow', C: 'cyan', G: 'green', M: 'magenta', P: 'hotpink' };   // '.' = vacío
 const MAX_DT = 0.05;
 const EXPLOSION_FRAME_COUNT = 4;
+
+const LEVELS = [
+  { speed: 300, rows: [
+    'RRRRRRRRRR',
+    'YYYYYYYYYY',
+    'CCCCCCCCCC',
+    'GGGGGGGGGG',
+    'MMMMMMMMMM',
+    'PPPPPPPPPP',
+  ] },
+  { speed: 340, rows: [
+    '....RR....',
+    '...YYYY...',
+    '..CCCCCC..',
+    '.GGGGGGGG.',
+    'MMMMMMMMMM',
+    'PPPPPPPPPP',
+  ] },
+  { speed: 380, rows: [
+    'RR.RR.RR.R',
+    'YY.YY.YY.Y',
+    'CCCCCCCCCC',
+    'G.G.G.G.G.',
+    '.M.M.M.M.M',
+    'PPPPPPPPPP',
+  ] },
+];
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
 const game = {
   state: 'ready',   // 'ready' | 'playing' | 'won' | 'lost'
+  level: 1,         // 1-based; LEVELS[game.level - 1]
   score: 0,
   lives: INITIAL_LIVES,
   paddle: { x: (W - 162) / 2, y: 560, w: 162, h: 14 },
@@ -43,7 +71,8 @@ function keyToDir(code) {
 function resetGame() {
   game.score = 0;
   game.lives = INITIAL_LIVES;
-  game.blocks = createBlocks();
+  game.level = 1;
+  game.blocks = createBlocks(game.level);
   game.explosions = [];
   game.ball.vx = 0;
   game.ball.vy = 0;
@@ -132,12 +161,14 @@ function updateBall(dt) {
   if (ball.y > H) loseLife();
 }
 
-function createBlocks() {
+function createBlocks(level) {
   const BLOCK_W = 64, BLOCK_H = 32, COLS = 10, TOP = 60;
   const left = (W - COLS * BLOCK_W) / 2;
   const blocks = [];
-  ROW_COLORS.forEach((color, row) => {
+  LEVELS[level - 1].rows.forEach((rowStr, row) => {
     for (let col = 0; col < COLS; col++) {
+      const color = BLOCK_CHARS[rowStr[col]];
+      if (!color) continue;
       blocks.push({
         x: left + col * BLOCK_W,
         y: TOP + row * BLOCK_H,
@@ -258,7 +289,7 @@ function loop(now) {
 }
 
 loadSpritesheet(() => {
-  game.blocks = createBlocks();
+  game.blocks = createBlocks(game.level);
   stickBallToPaddle();
   requestAnimationFrame((now) => {
     lastTime = now;

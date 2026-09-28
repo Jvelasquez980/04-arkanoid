@@ -21,6 +21,7 @@
 - Sonido `ball-bounce.mp3` al rebotar en paleta, paredes laterales y techo.
 - Sonido `break-sound.mp3` al romper un bloque (sin bounce en ese rebote).
 - Tecla M alterna mute; indicador `Silencio (M)` en HUD bajo el score cuando está activo. No persiste.
+- Selector de niveles (para pruebas): teclas `1`, `2`, `3` en estado `ready` cargan ese nivel con la bola pegada. Score y vidas se conservan.
 
 **Fuera de alcance (specs futuros):**
 
@@ -29,7 +30,7 @@
 - Música de fondo, control de volumen, persistencia del mute.
 - Sonidos de perder vida, lanzar bola, victoria o game over.
 - Continuar desde el nivel perdido tras Game Over.
-- Selección de nivel, high score persistente, power-ups.
+- Menú visual de selección de nivel, high score persistente, power-ups.
 - Ángulo de rebote según impacto en la paleta.
 
 ## Modelo de datos
@@ -96,6 +97,7 @@ Convenciones:
 4. HUD `Nivel N` centrado arriba. Prueba: se actualiza al pasar de nivel y vuelve a 1 al reiniciar.
 5. `SOUNDS`, `playSound` y llamadas: `bounce` en paleta, paredes y techo; `break` en `collideBlocks`. Prueba: se oyen ambos sonidos; romper bloque no suena bounce.
 6. Tecla M alterna `muted`; indicador `Silencio (M)` bajo el score. Prueba: M silencia y reactiva; reiniciar no cambia el mute.
+7. Selector de niveles: extraer `loadLevel(n)` (`level = n`, bloques nuevos, `explosions = []`, `ready`, bola pegada) y usarla en `nextLevel()`. En `keydown`, `1`..`LEVELS.length` en `ready` llama `loadLevel(n)`; ignorado en otros estados. Prueba: en `ready`, pulsar 2 → layout y velocidad del nivel 2; pulsar 3 → nivel 3; durante `playing` no hace nada.
 
 ## Criterios de aceptación
 
@@ -117,6 +119,9 @@ Convenciones:
 - [ ] M silencia todos los sonidos y muestra `Silencio (M)`; M de nuevo los reactiva.
 - [ ] Reiniciar la partida no cambia el estado de mute; recargar la página lo desactiva.
 - [ ] Si el audio falla (bloqueado o ausente), el juego sigue sin errores no capturados.
+- [ ] En `ready`, las teclas 1, 2 y 3 cargan el nivel correspondiente (layout y velocidad propios) con la bola pegada.
+- [ ] Las teclas 1-3 no hacen nada en `playing`, `cleared`, `won` ni `lost`.
+- [ ] Cambiar de nivel con 1-3 conserva score y vidas.
 
 ## Decisiones
 
@@ -132,6 +137,8 @@ Convenciones:
 - **Sí:** `HTMLAudioElement` + `cloneNode`. Funciona en `file://`; Web Audio con `fetch` falla ahí.
 - **Sí:** bounce en paleta/paredes/techo; en bloque solo break. Evita doble sonido.
 - **Sí:** mute con M, sin persistencia. Suficiente; persistir va en otro spec.
+- **Sí:** selector por teclas 1-3 solo en `ready`. Herramienta de prueba mínima; sin UI ni riesgo de cambiar nivel a mitad de partida.
+- **No:** menú visual de niveles. No hace falta para probar.
 - **No:** bloques gray resistentes. Requieren estados de daño; spec propio.
 
 ## Riesgos
@@ -150,4 +157,4 @@ Convenciones:
 - Más niveles, procedurales o editor.
 - Música, volumen, mute persistente.
 - Sonidos de vida, lanzamiento, victoria o game over.
-- High score, power-ups, selección de nivel.
+- High score, power-ups, menú visual de selección de nivel.
