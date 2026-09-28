@@ -92,14 +92,18 @@ function resetGame() {
   stickBallToPaddle();
 }
 
-function nextLevel() {
-  game.level++;
-  game.blocks = createBlocks(game.level);
+function loadLevel(n) {
+  game.level = n;
+  game.blocks = createBlocks(n);
   game.explosions = [];
   game.ball.vx = 0;
   game.ball.vy = 0;
   game.state = 'ready';
   stickBallToPaddle();
+}
+
+function nextLevel() {
+  loadLevel(game.level + 1);
 }
 
 // Espacio o clic: lanza la bola en `ready`, sigue en `cleared`, reinicia en `won`/`lost`
@@ -124,6 +128,11 @@ window.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
     e.preventDefault();
     if (!e.repeat) primaryAction();
+    return;
+  }
+  const n = e.code.startsWith('Digit') ? Number(e.code.slice(5)) : 0;
+  if (n >= 1 && n <= LEVELS.length) {
+    if (game.state === 'ready') loadLevel(n);
     return;
   }
   if (e.code === 'KeyM') {
