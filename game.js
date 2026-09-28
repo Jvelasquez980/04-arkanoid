@@ -38,7 +38,21 @@ function keyToDir(code) {
   return null;
 }
 
+function launchBall() {
+  if (game.state !== 'ready') return;
+  // Hacia arriba, con desviación aleatoria de ±15° respecto a la vertical
+  const angle = (Math.random() * 2 - 1) * (Math.PI / 12);
+  game.ball.vx = BALL_SPEED * Math.sin(angle);
+  game.ball.vy = -BALL_SPEED * Math.cos(angle);
+  game.state = 'playing';
+}
+
 window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (!e.repeat) launchBall();
+    return;
+  }
   const dir = keyToDir(e.code);
   if (!dir) return;
   e.preventDefault();
@@ -59,6 +73,26 @@ canvas.addEventListener('mousemove', (e) => {
   lastInput = 'mouse';
 });
 
+canvas.addEventListener('mousedown', () => launchBall());
+
+function updateBall(dt) {
+  const { ball } = game;
+  ball.x += ball.vx * dt;
+  ball.y += ball.vy * dt;
+
+  if (ball.x < 0) {
+    ball.x = 0;
+    ball.vx = Math.abs(ball.vx);
+  } else if (ball.x + ball.w > W) {
+    ball.x = W - ball.w;
+    ball.vx = -Math.abs(ball.vx);
+  }
+  if (ball.y < 0) {
+    ball.y = 0;
+    ball.vy = Math.abs(ball.vy);
+  }
+}
+
 function update(dt) {
   if (lastInput === 'keyboard') {
     const dir = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
@@ -66,6 +100,7 @@ function update(dt) {
     clampPaddle();
   }
   if (game.state === 'ready') stickBallToPaddle();
+  else if (game.state === 'playing') updateBall(dt);
 }
 
 function draw() {
