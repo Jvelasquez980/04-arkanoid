@@ -219,7 +219,7 @@ function draw() {
   drawSprite(ctx, 'paddle', paddle.x, paddle.y, paddle.w, paddle.h);
   drawSprite(ctx, 'ball', ball.x, ball.y, ball.w, ball.h);
   drawHud();
-  if (game.state === 'won') drawOverlay('¡Victoria!');
+  if (game.state === 'won' && game.explosions.length === 0) drawOverlay('¡Victoria!');
   else if (game.state === 'lost') drawOverlay('Game Over');
 }
 
