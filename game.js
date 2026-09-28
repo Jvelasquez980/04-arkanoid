@@ -38,6 +38,22 @@ function keyToDir(code) {
   return null;
 }
 
+function resetGame() {
+  game.score = 0;
+  game.lives = INITIAL_LIVES;
+  game.blocks = createBlocks();
+  game.ball.vx = 0;
+  game.ball.vy = 0;
+  game.state = 'ready';
+  stickBallToPaddle();
+}
+
+// Espacio o clic: lanza la bola en `ready`, reinicia en `won`/`lost`
+function primaryAction() {
+  if (game.state === 'won' || game.state === 'lost') resetGame();
+  else launchBall();
+}
+
 function launchBall() {
   if (game.state !== 'ready') return;
   // Hacia arriba, con desviación aleatoria de ±15° respecto a la vertical
@@ -50,7 +66,7 @@ function launchBall() {
 window.addEventListener('keydown', (e) => {
   if (e.code === 'Space') {
     e.preventDefault();
-    if (!e.repeat) launchBall();
+    if (!e.repeat) primaryAction();
     return;
   }
   const dir = keyToDir(e.code);
@@ -73,7 +89,7 @@ canvas.addEventListener('mousemove', (e) => {
   lastInput = 'mouse';
 });
 
-canvas.addEventListener('mousedown', () => launchBall());
+canvas.addEventListener('mousedown', () => primaryAction());
 
 function updateBall(dt) {
   const { ball } = game;
@@ -103,6 +119,12 @@ function updateBall(dt) {
   }
 
   collideBlocks();
+  if (game.blocks.every((b) => !b.alive)) {
+    game.state = 'won';
+    ball.vx = 0;
+    ball.vy = 0;
+    return;
+  }
 
   if (ball.y > H) loseLife();
 }
@@ -182,6 +204,32 @@ function draw() {
   }
   drawSprite(ctx, 'paddle', paddle.x, paddle.y, paddle.w, paddle.h);
   drawSprite(ctx, 'ball', ball.x, ball.y, ball.w, ball.h);
+  drawHud();
+  if (game.state === 'won') drawOverlay('¡Victoria!');
+  else if (game.state === 'lost') drawOverlay('Game Over');
+}
+
+function drawHud() {
+  ctx.fillStyle = '#fff';
+  ctx.font = '20px monospace';
+  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left';
+  ctx.fillText('Score: ' + game.score, 16, 16);
+  ctx.textAlign = 'right';
+  ctx.fillText('Vidas: ' + game.lives, W - 16, 16);
+}
+
+function drawOverlay(title) {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.font = 'bold 56px monospace';
+  ctx.fillText(title, W / 2, H / 2 - 30);
+  ctx.font = '22px monospace';
+  ctx.fillText('Score: ' + game.score, W / 2, H / 2 + 20);
+  ctx.fillText('Espacio o clic para reiniciar', W / 2, H / 2 + 60);
 }
 
 let lastTime = 0;
