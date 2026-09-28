@@ -102,7 +102,53 @@ function updateBall(dt) {
     ball.vy = -Math.abs(ball.vy);
   }
 
+  collideBlocks();
+
   if (ball.y > H) loseLife();
+}
+
+function createBlocks() {
+  const BLOCK_W = 64, BLOCK_H = 32, COLS = 10, TOP = 60;
+  const left = (W - COLS * BLOCK_W) / 2;
+  const blocks = [];
+  ROW_COLORS.forEach((color, row) => {
+    for (let col = 0; col < COLS; col++) {
+      blocks.push({
+        x: left + col * BLOCK_W,
+        y: TOP + row * BLOCK_H,
+        w: BLOCK_W,
+        h: BLOCK_H,
+        color,
+        alive: true,
+      });
+    }
+  });
+  return blocks;
+}
+
+function collideBlocks() {
+  const { ball } = game;
+  for (const b of game.blocks) {
+    if (!b.alive) continue;
+    const overlapX = Math.min(ball.x + ball.w, b.x + b.w) - Math.max(ball.x, b.x);
+    const overlapY = Math.min(ball.y + ball.h, b.y + b.h) - Math.max(ball.y, b.y);
+    if (overlapX <= 0 || overlapY <= 0) continue;
+
+    // Reflejo según el eje de menor penetración
+    const ballCx = ball.x + ball.w / 2, ballCy = ball.y + ball.h / 2;
+    if (overlapX < overlapY) {
+      const fromLeft = ballCx < b.x + b.w / 2;
+      ball.x += fromLeft ? -overlapX : overlapX;
+      ball.vx = fromLeft ? -Math.abs(ball.vx) : Math.abs(ball.vx);
+    } else {
+      const fromTop = ballCy < b.y + b.h / 2;
+      ball.y += fromTop ? -overlapY : overlapY;
+      ball.vy = fromTop ? -Math.abs(ball.vy) : Math.abs(ball.vy);
+    }
+    b.alive = false;
+    game.score += POINTS_PER_BLOCK;
+    break;   // un bloque por frame
+  }
 }
 
 function loseLife() {
@@ -131,6 +177,9 @@ function update(dt) {
 function draw() {
   ctx.clearRect(0, 0, W, H);
   const { paddle, ball } = game;
+  for (const b of game.blocks) {
+    if (b.alive) drawSprite(ctx, 'block_' + b.color, b.x, b.y, b.w, b.h);
+  }
   drawSprite(ctx, 'paddle', paddle.x, paddle.y, paddle.w, paddle.h);
   drawSprite(ctx, 'ball', ball.x, ball.y, ball.w, ball.h);
 }
@@ -145,6 +194,7 @@ function loop(now) {
 }
 
 loadSpritesheet(() => {
+  game.blocks = createBlocks();
   stickBallToPaddle();
   requestAnimationFrame((now) => {
     lastTime = now;
