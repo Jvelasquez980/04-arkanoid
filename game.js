@@ -190,7 +190,13 @@ function loseLife() {
   }
 }
 
+function updateExplosions(dt) {
+  for (const e of game.explosions) e.elapsed += dt * 1000;
+  game.explosions = game.explosions.filter((e) => e.elapsed < EXPLOSION_DURATION);
+}
+
 function update(dt) {
+  updateExplosions(dt);
   if (lastInput === 'keyboard') {
     const dir = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
     game.paddle.x += dir * PADDLE_SPEED * dt;
