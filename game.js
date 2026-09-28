@@ -126,6 +126,10 @@ window.addEventListener('keydown', (e) => {
     if (!e.repeat) primaryAction();
     return;
   }
+  if (e.code === 'KeyM') {
+    if (!e.repeat) muted = !muted;
+    return;
+  }
   const dir = keyToDir(e.code);
   if (!dir) return;
   e.preventDefault();
@@ -299,6 +303,7 @@ function drawHud() {
   ctx.textBaseline = 'top';
   ctx.textAlign = 'left';
   ctx.fillText('Score: ' + game.score, 16, 16);
+  if (muted) ctx.fillText('Silencio (M)', 16, 42);
   ctx.textAlign = 'center';
   ctx.fillText('Nivel ' + game.level, W / 2, 16);
   ctx.textAlign = 'left';
