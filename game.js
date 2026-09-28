@@ -5,6 +5,7 @@ const POINTS_PER_BLOCK = 10;
 const INITIAL_LIVES = 3;
 const ROW_COLORS = ['red', 'yellow', 'cyan', 'green', 'magenta', 'hotpink'];
 const MAX_DT = 0.05;
+const EXPLOSION_FRAME_COUNT = 4;
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -16,6 +17,7 @@ const game = {
   paddle: { x: (W - 162) / 2, y: 560, w: 162, h: 14 },
   ball: { x: 0, y: 0, w: 16, h: 16, vx: 0, vy: 0 },
   blocks: [],
+  explosions: [],   // { x, y, w, h, color, elapsed } elapsed en ms
 };
 
 function stickBallToPaddle() {
@@ -42,6 +44,7 @@ function resetGame() {
   game.score = 0;
   game.lives = INITIAL_LIVES;
   game.blocks = createBlocks();
+  game.explosions = [];
   game.ball.vx = 0;
   game.ball.vy = 0;
   game.state = 'ready';
