@@ -38,7 +38,7 @@ const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
 const game = {
-  state: 'ready',   // 'ready' | 'playing' | 'won' | 'lost'
+  state: 'ready',   // 'ready' | 'playing' | 'cleared' | 'won' | 'lost'
   level: 1,         // 1-based; LEVELS[game.level - 1]
   score: 0,
   lives: INITIAL_LIVES,
@@ -80,10 +80,22 @@ function resetGame() {
   stickBallToPaddle();
 }
 
-// Espacio o clic: lanza la bola en `ready`, reinicia en `won`/`lost`
+function nextLevel() {
+  game.level++;
+  game.blocks = createBlocks(game.level);
+  game.explosions = [];
+  game.ball.vx = 0;
+  game.ball.vy = 0;
+  game.state = 'ready';
+  stickBallToPaddle();
+}
+
+// Espacio o clic: lanza la bola en `ready`, sigue en `cleared`, reinicia en `won`/`lost`
 function primaryAction() {
   if (game.state === 'won' || game.state === 'lost') resetGame();
-  else launchBall();
+  else if (game.state === 'cleared') {
+    if (game.explosions.length === 0) nextLevel();
+  } else launchBall();
 }
 
 function launchBall() {
@@ -160,7 +172,7 @@ function stepBall(dt) {
 
   collideBlocks();
   if (game.blocks.every((b) => !b.alive)) {
-    game.state = 'won';
+    game.state = game.level < LEVELS.length ? 'cleared' : 'won';
     ball.vx = 0;
     ball.vy = 0;
     return;
@@ -259,7 +271,9 @@ function draw() {
   drawSprite(ctx, 'ball', ball.x, ball.y, ball.w, ball.h);
   drawHud();
   if (game.state === 'won' && game.explosions.length === 0) drawOverlay('¡Victoria!');
-  else if (game.state === 'lost') drawOverlay('Game Over');
+  else if (game.state === 'cleared' && game.explosions.length === 0) {
+    drawOverlay('Nivel ' + game.level + ' completado', 'Espacio o clic para continuar');
+  } else if (game.state === 'lost') drawOverlay('Game Over');
 }
 
 function drawHud() {
@@ -274,7 +288,7 @@ function drawHud() {
   }
 }
 
-function drawOverlay(title) {
+function drawOverlay(title, hint = 'Espacio o clic para reiniciar') {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
   ctx.fillRect(0, 0, W, H);
   ctx.fillStyle = '#fff';
@@ -284,7 +298,7 @@ function drawOverlay(title) {
   ctx.fillText(title, W / 2, H / 2 - 30);
   ctx.font = '22px monospace';
   ctx.fillText('Score: ' + game.score, W / 2, H / 2 + 20);
-  ctx.fillText('Espacio o clic para reiniciar', W / 2, H / 2 + 60);
+  ctx.fillText(hint, W / 2, H / 2 + 60);
 }
 
 let lastTime = 0;
