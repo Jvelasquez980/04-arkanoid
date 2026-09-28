@@ -215,8 +215,10 @@ function drawHud() {
   ctx.textBaseline = 'top';
   ctx.textAlign = 'left';
   ctx.fillText('Score: ' + game.score, 16, 16);
-  ctx.textAlign = 'right';
-  ctx.fillText('Vidas: ' + game.lives, W - 16, 16);
+  const size = 20, gap = 6;
+  for (let i = 0; i < game.lives; i++) {
+    drawSprite(ctx, 'ball', W - 16 - (i + 1) * size - i * gap, 16, size, size);
+  }
 }
 
 function drawOverlay(title) {
