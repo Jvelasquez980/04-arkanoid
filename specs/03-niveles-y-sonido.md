@@ -1,6 +1,6 @@
 # SPEC 03 — Niveles y sonido
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01, SPEC 02
 > **Date:** 2026-09-28
 > **Objective:** Añadir 3 niveles con layout y velocidad de bola propios, más sonidos de rebote y rotura de bloque con mute por tecla M.
@@ -101,27 +101,27 @@ Convenciones:
 
 ## Criterios de aceptación
 
-- [ ] Abrir `index.html` con `file://` carga el juego sin errores en consola.
-- [ ] Nivel 1 tiene 60 bloques en el layout de SPEC 01.
-- [ ] Niveles 2 y 3 muestran exactamente los layouts de `LEVELS`.
-- [ ] La bola va a 300 px/s en nivel 1, 340 en nivel 2 y 380 en nivel 3.
-- [ ] En nivel 3 la bola no atraviesa bloques ni la paleta.
-- [ ] Al romper el último bloque de nivel 1 o 2, tras la explosión aparece `Nivel N completado`.
-- [ ] Espacio o clic en ese overlay carga el siguiente nivel con la bola pegada a la paleta.
-- [ ] Score y vidas se conservan al pasar de nivel.
-- [ ] Al romper el último bloque del nivel 3 aparece el overlay de victoria.
-- [ ] Reiniciar desde Victoria o Game Over deja nivel 1, score 0, 3 vidas.
-- [ ] El HUD muestra `Nivel N` centrado y actualizado.
-- [ ] Rebotar en paleta, pared lateral o techo reproduce `ball-bounce.mp3`.
-- [ ] Romper un bloque reproduce `break-sound.mp3` y no `ball-bounce.mp3`.
-- [ ] Varios sonidos seguidos se solapan sin cortarse.
-- [ ] La bola pegada a la paleta (`ready`) no reproduce sonidos.
-- [ ] M silencia todos los sonidos y muestra `Silencio (M)`; M de nuevo los reactiva.
-- [ ] Reiniciar la partida no cambia el estado de mute; recargar la página lo desactiva.
-- [ ] Si el audio falla (bloqueado o ausente), el juego sigue sin errores no capturados.
-- [ ] En `ready`, las teclas 1, 2 y 3 cargan el nivel correspondiente (layout y velocidad propios) con la bola pegada.
-- [ ] Las teclas 1-3 no hacen nada en `playing`, `cleared`, `won` ni `lost`.
-- [ ] Cambiar de nivel con 1-3 conserva score y vidas.
+- [X] Abrir `index.html` con `file://` carga el juego sin errores en consola.
+- [X] Nivel 1 tiene 60 bloques en el layout de SPEC 01.
+- [X] Niveles 2 y 3 muestran exactamente los layouts de `LEVELS`.
+- [X] La bola va a 300 px/s en nivel 1, 340 en nivel 2 y 380 en nivel 3.
+- [X] En nivel 3 la bola no atraviesa bloques ni la paleta.
+- [X] Al romper el último bloque de nivel 1 o 2, tras la explosión aparece `Nivel N completado`.
+- [X] Espacio o clic en ese overlay carga el siguiente nivel con la bola pegada a la paleta.
+- [X] Score y vidas se conservan al pasar de nivel.
+- [X] Al romper el último bloque del nivel 3 aparece el overlay de victoria.
+- [X] Reiniciar desde Victoria o Game Over deja nivel 1, score 0, 3 vidas.
+- [X] El HUD muestra `Nivel N` centrado y actualizado.
+- [X] Rebotar en paleta, pared lateral o techo reproduce `ball-bounce.mp3`.
+- [X] Romper un bloque reproduce `break-sound.mp3` y no `ball-bounce.mp3`.
+- [X] Varios sonidos seguidos se solapan sin cortarse.
+- [X] La bola pegada a la paleta (`ready`) no reproduce sonidos.
+- [X] M silencia todos los sonidos y muestra `Silencio (M)`; M de nuevo los reactiva.
+- [X] Reiniciar la partida no cambia el estado de mute; recargar la página lo desactiva.
+- [X] Si el audio falla (bloqueado o ausente), el juego sigue sin errores no capturados.
+- [X] En `ready`, las teclas 1, 2 y 3 cargan el nivel correspondiente (layout y velocidad propios) con la bola pegada.
+- [X] Las teclas 1-3 no hacen nada en `playing`, `cleared`, `won` ni `lost`.
+- [X] Cambiar de nivel con 1-3 conserva score y vidas.
 
 ## Decisiones
 
