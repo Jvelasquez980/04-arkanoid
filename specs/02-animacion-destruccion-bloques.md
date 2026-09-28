@@ -1,6 +1,6 @@
 # SPEC 02 — Animación de destrucción de bloques
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-09-28
 > **Objective:** Al romperse un bloque, reproducir en su posición la animación de explosión de 4 frames (`EXPLOSION_FRAMES`) durante 150 ms, sin afectar colisión ni puntaje.
@@ -53,17 +53,17 @@ Convenciones:
 
 ## Criterios de aceptación
 
-- [ ] Al romper un bloque aparece en su posición una animación de 4 frames del color del bloque.
-- [ ] La animación dura 150 ms en total (`EXPLOSION_DURATION`).
-- [ ] El bloque original deja de dibujarse en el instante del impacto (sin superposición con la explosión).
-- [ ] Puntaje sigue sumando exactamente 10 por bloque, al instante del impacto.
-- [ ] La bola atraviesa la explosión sin rebotar.
-- [ ] Al terminar la animación, `game.explosions` queda sin ese elemento.
-- [ ] Al perder una vida, las explosiones activas terminan su animación.
-- [ ] Al romper el último bloque, primero se ve la explosión y después aparece el overlay de victoria.
-- [ ] Al reiniciar (Espacio o clic), `game.explosions` queda vacío.
-- [ ] Explosiones de varios bloques rotos en frames cercanos se animan de forma independiente.
-- [ ] No hay errores en consola y no se reproduce ningún sonido.
+- [X] Al romper un bloque aparece en su posición una animación de 4 frames del color del bloque.
+- [X] La animación dura 150 ms en total (`EXPLOSION_DURATION`).
+- [X] El bloque original deja de dibujarse en el instante del impacto (sin superposición con la explosión).
+- [X] Puntaje sigue sumando exactamente 10 por bloque, al instante del impacto.
+- [X] La bola atraviesa la explosión sin rebotar.
+- [X] Al terminar la animación, `game.explosions` queda sin ese elemento.
+- [X] Al perder una vida, las explosiones activas terminan su animación.
+- [X] Al romper el último bloque, primero se ve la explosión y después aparece el overlay de victoria.
+- [X] Al reiniciar (Espacio o clic), `game.explosions` queda vacío.
+- [X] Explosiones de varios bloques rotos en frames cercanos se animan de forma independiente.
+- [X] No hay errores en consola y no se reproduce ningún sonido.
 
 ## Decisiones
 
