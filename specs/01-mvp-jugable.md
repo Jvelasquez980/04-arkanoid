@@ -1,6 +1,6 @@
 # SPEC 01 — MVP jugable de Arkanoid
 
-> **Status:** Aprobado
+> **Status:** Implementado
 > **Depends on:** ninguno
 > **Date:** 2026-09-28
 > **Objective:** Un Arkanoid de una sola pantalla, jugable con mouse y teclado, con 3 vidas, puntaje básico y overlay de victoria/game over.
@@ -72,21 +72,21 @@ Convenciones:
 
 ## Criterios de aceptación
 
-- [ ] Abrir `index.html` con `file://` carga el juego sin errores en consola.
-- [ ] Se dibujan 60 bloques en 6 filas de colores distintos, 10 por fila.
-- [ ] El mouse mueve la paleta y nunca sale del canvas.
-- [ ] ←/→ y A/D mueven la paleta y nunca sale del canvas.
-- [ ] Mouse y teclado funcionan en la misma partida sin conflicto (el último input usado controla).
-- [ ] Al inicio y tras perder una vida, la bola está pegada a la paleta y la sigue.
-- [ ] Espacio o clic lanza la bola; en `ready` la bola no se mueve por sí sola.
-- [ ] La bola rebota en paredes laterales, techo y paleta.
-- [ ] La bola se mueve a velocidad constante (300 px/s) durante toda la partida.
-- [ ] Romper un bloque lo elimina y suma exactamente 10 puntos.
-- [ ] La bola que cae por abajo resta 1 vida y vuelve a `ready`.
-- [ ] El HUD muestra puntaje y vidas actualizados en tiempo real; vidas inicia en 3.
-- [ ] Con 0 vidas aparece el overlay de game over; con 0 bloques, el de victoria.
-- [ ] Espacio o clic en el overlay reinicia: score 0, vidas 3, 60 bloques, estado `ready`.
-- [ ] No se reproduce ningún sonido ni animación de explosión.
+- [X] Abrir `index.html` con `file://` carga el juego sin errores en consola.
+- [X] Se dibujan 60 bloques en 6 filas de colores distintos, 10 por fila.
+- [X] El mouse mueve la paleta y nunca sale del canvas.
+- [X] ←/→ y A/D mueven la paleta y nunca sale del canvas.
+- [X] Mouse y teclado funcionan en la misma partida sin conflicto (el último input usado controla).
+- [X] Al inicio y tras perder una vida, la bola está pegada a la paleta y la sigue.
+- [X] Espacio o clic lanza la bola; en `ready` la bola no se mueve por sí sola.
+- [X] La bola rebota en paredes laterales, techo y paleta.
+- [X] La bola se mueve a velocidad constante (300 px/s) durante toda la partida.
+- [X] Romper un bloque lo elimina y suma exactamente 10 puntos.
+- [X] La bola que cae por abajo resta 1 vida y vuelve a `ready`.
+- [X] El HUD muestra puntaje y vidas actualizados en tiempo real; vidas inicia en 3.
+- [X] Con 0 vidas aparece el overlay de game over; con 0 bloques, el de victoria.
+- [X] Espacio o clic en el overlay reinicia: score 0, vidas 3, 60 bloques, estado `ready`.
+- [X] No se reproduce ningún sonido ni animación de explosión.
 
 ## Decisiones
 
