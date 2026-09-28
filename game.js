@@ -212,6 +212,10 @@ function draw() {
   for (const b of game.blocks) {
     if (b.alive) drawSprite(ctx, 'block_' + b.color, b.x, b.y, b.w, b.h);
   }
+  for (const e of game.explosions) {
+    const i = Math.min(EXPLOSION_FRAME_COUNT - 1, Math.floor(e.elapsed / (EXPLOSION_DURATION / EXPLOSION_FRAME_COUNT)));
+    drawFrame(ctx, EXPLOSION_FRAMES[e.color][i], e.x, e.y, e.w, e.h);
+  }
   drawSprite(ctx, 'paddle', paddle.x, paddle.y, paddle.w, paddle.h);
   drawSprite(ctx, 'ball', ball.x, ball.y, ball.w, ball.h);
   drawHud();
