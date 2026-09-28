@@ -1,5 +1,5 @@
 const W = 800, H = 600;
-const BALL_SPEED = 300;      // px/s, constante
+const MAX_STEP = 8;          // px máximos por substep de la bola
 const PADDLE_SPEED = 500;    // px/s, teclado
 const POINTS_PER_BLOCK = 10;
 const INITIAL_LIVES = 3;
@@ -90,8 +90,9 @@ function launchBall() {
   if (game.state !== 'ready') return;
   // Hacia arriba, con desviación aleatoria de ±15° respecto a la vertical
   const angle = (Math.random() * 2 - 1) * (Math.PI / 12);
-  game.ball.vx = BALL_SPEED * Math.sin(angle);
-  game.ball.vy = -BALL_SPEED * Math.cos(angle);
+  const speed = LEVELS[game.level - 1].speed;
+  game.ball.vx = speed * Math.sin(angle);
+  game.ball.vy = -speed * Math.cos(angle);
   game.state = 'playing';
 }
 
@@ -123,7 +124,14 @@ canvas.addEventListener('mousemove', (e) => {
 
 canvas.addEventListener('mousedown', () => primaryAction());
 
+// Avanza la bola en substeps de ≤ MAX_STEP px para evitar tunneling
 function updateBall(dt) {
+  const speed = LEVELS[game.level - 1].speed;
+  const n = Math.ceil(speed * dt / MAX_STEP);
+  for (let i = 0; i < n && game.state === 'playing'; i++) stepBall(dt / n);
+}
+
+function stepBall(dt) {
   const { ball } = game;
   ball.x += ball.vx * dt;
   ball.y += ball.vy * dt;
