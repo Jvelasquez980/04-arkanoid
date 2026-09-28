@@ -171,6 +171,7 @@ function collideBlocks() {
       ball.vy = fromTop ? -Math.abs(ball.vy) : Math.abs(ball.vy);
     }
     b.alive = false;
+    game.explosions.push({ x: b.x, y: b.y, w: b.w, h: b.h, color: b.color, elapsed: 0 });
     game.score += POINTS_PER_BLOCK;
     break;   // un bloque por frame
   }
