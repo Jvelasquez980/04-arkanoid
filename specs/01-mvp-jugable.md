@@ -1,6 +1,6 @@
 # SPEC 01 — MVP jugable de Arkanoid
 
-> **Status:** Borrador
+> **Status:** Aprobado
 > **Depends on:** ninguno
 > **Date:** 2026-09-28
 > **Objective:** Un Arkanoid de una sola pantalla, jugable con mouse y teclado, con 3 vidas, puntaje básico y overlay de victoria/game over.
